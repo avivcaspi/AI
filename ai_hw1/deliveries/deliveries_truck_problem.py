@@ -56,7 +56,8 @@ class DeliveriesTruckState(GraphProblemState):
         #   (using equals `==` operator) because the class `Junction` explicitly
         #   implements the `__eq__()` method. The types `frozenset` and `Delivery`
         #   are also comparable (in the same manner).
-        raise NotImplementedError()  # TODO: remove this line.
+        return self.loaded_deliveries == other.loaded_deliveries and \
+               self.dropped_deliveries == other.dropped_deliveries and self.current_location == other.current_location
 
     def __hash__(self):
         """
@@ -76,7 +77,7 @@ class DeliveriesTruckState(GraphProblemState):
          Notice that `sum()` can receive an *ITERATOR* as argument; That is, you can simply write something like this:
         >>> sum(<some expression using item> for item in some_collection_of_items)
         """
-        raise NotImplementedError()  # TODO: remove this line.
+        return sum(delivery.nr_packages for delivery in self.loaded_deliveries)
 
 
 @dataclass(frozen=True)
@@ -183,7 +184,9 @@ class DeliveriesTruckProblem(GraphProblem):
         """
 
         assert isinstance(state_to_expand, DeliveriesTruckState)
-        raise NotImplementedError()  # TODO: remove this line!
+        available = [delivery for delivery in self.get_deliveries_waiting_to_pick(state_to_expand) \
+            if delivery.nr_packages <= (self.problem_input.delivery_truck.max_nr_loaded_packages - self.get_total_nr_packages_loaded())]
+#TODO add droping -states
 
     def is_goal(self, state: GraphProblemState) -> bool:
         """
@@ -191,7 +194,7 @@ class DeliveriesTruckProblem(GraphProblem):
         TODO [Ex.15]: implement this method!
         """
         assert isinstance(state, DeliveriesTruckState)
-        raise NotImplementedError()  # TODO: remove the line!
+        return set(self.problem_input.deliveries) == state.dropped_deliveries
 
     def _calc_map_road_cost(self, link: Link) -> DeliveryCost:
         """
@@ -254,7 +257,7 @@ class DeliveriesTruckProblem(GraphProblem):
                 generated set.
             Note: This method can be implemented using a single line of code.
         """
-        raise NotImplementedError()  # TODO: remove this line!
+        return set(self.problem_input.deliveries) ^ (state.loaded_deliveries | state.dropped_deliveries)
 
     def get_all_junctions_in_remaining_truck_path(self, state: DeliveriesTruckState) -> Set[Junction]:
         """
