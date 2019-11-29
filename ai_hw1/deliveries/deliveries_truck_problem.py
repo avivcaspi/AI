@@ -6,7 +6,6 @@ from .map_problem import MapProblem, MapState
 from .cached_map_distance_finder import CachedMapDistanceFinder
 from .deliveries_truck_problem_input import *
 
-
 __all__ = ['DeliveriesTruckState', 'DeliveryCost', 'DeliveriesTruckProblem', 'TruckDeliveriesInnerMapProblemHeuristic']
 
 
@@ -184,9 +183,42 @@ class DeliveriesTruckProblem(GraphProblem):
         """
 
         assert isinstance(state_to_expand, DeliveriesTruckState)
-        available = [delivery for delivery in self.get_deliveries_waiting_to_pick(state_to_expand) \
-            if delivery.nr_packages <= (self.problem_input.delivery_truck.max_nr_loaded_packages - self.get_total_nr_packages_loaded())]
-#TODO add droping -states
+        """
+            First we find which deliveries we can pick and than we iterate over them and pick  them
+        """
+        " Finds the delivery left to pick that we can pick with current space"
+        available_pick = [delivery for delivery in self.get_deliveries_waiting_to_pick(state_to_expand)
+                          if delivery.nr_packages <= (self.problem_input.delivery_truck.max_nr_loaded_packages -
+                                                      state_to_expand.get_total_nr_packages_loaded())]
+
+        for delivery in available_pick:
+            "Finds the cost of the operator, if cost is None than there is no path to the destination"
+            cost = self.map_distance_finder.get_map_cost_between(
+                state_to_expand.current_location, delivery.pick_location)
+            if cost is None:
+                continue
+            "Creates new loaded frozenset with new delivery"
+            new_loaded = state_to_expand.loaded_deliveries | frozenset({delivery})
+            yield OperatorResult(successor_state=DeliveriesTruckState(
+                current_location=delivery.pick_location, loaded_deliveries=new_loaded,
+                dropped_deliveries=state_to_expand.dropped_deliveries),
+                operator_cost=cost, operator_name="pick " + delivery.client_name)
+
+        """
+            Second we iterate over the loaded deliveries and drop them    
+        """
+        for delivery in state_to_expand.loaded_deliveries:
+            cost = self.map_distance_finder.get_map_cost_between(
+                state_to_expand.current_location, delivery.drop_location)
+            if cost is None:
+                continue
+            "Creates new loaded and dropped frozenset after dropping delivery"
+            new_loaded = state_to_expand.loaded_deliveries ^ frozenset({delivery})
+            new_dropped = state_to_expand.dropped_deliveries | frozenset({delivery})
+            yield OperatorResult(successor_state=DeliveriesTruckState(
+                current_location=delivery.drop_location, loaded_deliveries=new_loaded,
+                dropped_deliveries=new_dropped), operator_cost=cost,
+                operator_name="drop " + delivery.client_name)
 
     def is_goal(self, state: GraphProblemState) -> bool:
         """
