@@ -135,7 +135,7 @@ def toy_map_problem_experiments():
     #     (upper in this file).
     #  3. Call here the function `run_astar_for_weights_in_range()`
     #     with `AirDistHeuristic` and `toy_map_problem`.
-    run_astar_for_weights_in_range(AirDistHeuristic,toy_map_problem,20)
+    run_astar_for_weights_in_range(AirDistHeuristic, toy_map_problem)
 
 # --------------------------------------------------------------------
 # --------------------- Truck Deliveries Problem ---------------------

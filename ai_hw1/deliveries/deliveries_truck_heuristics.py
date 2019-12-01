@@ -101,6 +101,7 @@ class TruckDeliveriesSumAirDistHeuristic(HeuristicFunction):
 """
         total_cost_of_greedily_built_path = 0
         curr = state.current_location
+        all_junctions_in_remaining_truck_path = all_junctions_in_remaining_truck_path ^ {curr}
         while len(all_junctions_in_remaining_truck_path) > 0:
             dists = {jn: self.cached_air_distance_calculator.get_air_distance_between_junctions(curr, jn)
                      for jn in all_junctions_in_remaining_truck_path if jn != curr}
