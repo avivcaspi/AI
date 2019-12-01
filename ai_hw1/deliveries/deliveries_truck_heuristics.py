@@ -84,8 +84,8 @@ class TruckDeliveriesSumAirDistHeuristic(HeuristicFunction):
 
         if len(all_junctions_in_remaining_truck_path) < 2:
             return 0
-
-        """min_val = float("inf")
+        """
+        min_val = float("inf")
         curr = state.current_location
         total_cost_of_greedily_built_path = 0
         all_junctions_in_remaining_truck_path = all_junctions_in_remaining_truck_path ^ {curr}
@@ -94,11 +94,13 @@ class TruckDeliveriesSumAirDistHeuristic(HeuristicFunction):
                 dist = self.cached_air_distance_calculator.get_air_distance_between_junctions(curr, jn)
                 if dist < min_val:
                     min_val = dist
-                    curr = jn
+                    min_jn = jn
+            curr = min_jn
             all_junctions_in_remaining_truck_path = all_junctions_in_remaining_truck_path ^ {curr}
             total_cost_of_greedily_built_path += min_val
             min_val = float("inf")
-"""
+        return self.problem.get_cost_lower_bound_from_distance_lower_bound(total_cost_of_greedily_built_path)
+        """
         total_cost_of_greedily_built_path = 0
         curr = state.current_location
         all_junctions_in_remaining_truck_path = all_junctions_in_remaining_truck_path ^ {curr}
