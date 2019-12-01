@@ -84,12 +84,12 @@ def run_astar_for_weights_in_range(heuristic_type: HeuristicFunctionType, proble
     #     Don't forget to pass `max_nr_states_to_expand` to the AStar c'tor.
     #  3. Call the function `plot_distance_and_expanded_wrt_weight_figure()`
     #     with these 3 generated lists.
-    w_vals = np.linspace(0.5,1,num=n)
+    w_vals = np.linspace(0.5, 1, num=n)
     costs = []
     expanded = []
     weights = []
     for w in w_vals:
-        aStar = AStar(heuristic_type , w ,max_nr_states_to_expand)
+        aStar = AStar(heuristic_type, w, max_nr_states_to_expand)
         res = aStar.solve_problem(problem)
         if res.is_solution_found:
             costs.append(res.solution_g_cost)
@@ -136,7 +136,6 @@ def toy_map_problem_experiments():
     #  3. Call here the function `run_astar_for_weights_in_range()`
     #     with `AirDistHeuristic` and `toy_map_problem`.
     run_astar_for_weights_in_range(AirDistHeuristic,toy_map_problem,20)
-
 
 # --------------------------------------------------------------------
 # --------------------- Truck Deliveries Problem ---------------------
