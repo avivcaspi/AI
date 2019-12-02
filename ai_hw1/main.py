@@ -231,12 +231,16 @@ def multiple_objectives_deliveries_truck_problem_experiments():
     # Ex.29
     # TODO: create an instance of `AStar` with the `TruckDeliveriesMSTAirDistHeuristic`,
     #       solve the `small_delivery_problem_with_time_cost` with it and print the results.
-    exit()  # TODO: remove!
+    aStar = AStar(TruckDeliveriesMSTAirDistHeuristic)
+    res = aStar.solve_problem(small_delivery_problem_with_time_cost)
+    print(res)
 
     # Ex.29
     # TODO: create an instance of `AStar` with the `TruckDeliveriesMSTAirDistHeuristic`,
     #       solve the `small_delivery_problem_with_money_cost` with it and print the results.
-    exit()  # TODO: remove!
+    aStar = AStar(TruckDeliveriesMSTAirDistHeuristic)
+    res = aStar.solve_problem(small_delivery_problem_with_money_cost)
+    print(res)
 
 
 def deliveries_truck_problem_with_astar_epsilon_experiments():
@@ -296,9 +300,9 @@ def big_deliveries_truck_problem_with_non_acceptable_heuristic_and_anytime_astar
 
 def run_all_experiments():
     toy_map_problem_experiments()
-    basic_deliveries_truck_problem_experiments()
-    deliveries_truck_problem_with_astar_experiments()
-    deliveries_truck_problem_with_weighted_astar_experiments()
+    #basic_deliveries_truck_problem_experiments()
+    #deliveries_truck_problem_with_astar_experiments()
+    #deliveries_truck_problem_with_weighted_astar_experiments()
     multiple_objectives_deliveries_truck_problem_experiments()
     deliveries_truck_problem_with_astar_epsilon_experiments()
     deliveries_truck_problem_anytime_astar_experiments()
