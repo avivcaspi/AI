@@ -283,7 +283,7 @@ class DeliveriesTruckProblem(GraphProblem):
         else:
             assert self.optimization_objective == OptimizationObjective.Money
             link = Link(1, 2, distance=total_distance_lower_bound,
-                        highway_type=1, max_speed=MAX_ROAD_SPEED, is_toll_road=False)
+                        highway_type=1, max_speed=MIN_ROAD_SPEED, is_toll_road=False)
             return self._calc_map_road_cost(link).money_cost
 
     def get_deliveries_waiting_to_pick(self, state: DeliveriesTruckState) -> Set[Delivery]:
