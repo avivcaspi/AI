@@ -251,8 +251,8 @@ def deliveries_truck_problem_with_astar_epsilon_experiments():
     moderate_delivery_problem_with_distance_cost = get_deliveries_problem('moderate', OptimizationObjective.Distance)
 
     # Firstly solve the problem with AStar & MST heuristic for having a reference for #devs.
-    astar = AStar(TruckDeliveriesMSTAirDistHeuristic)
-    res = astar.solve_problem(moderate_delivery_problem_with_distance_cost)
+    aStar = AStar(TruckDeliveriesMSTAirDistHeuristic)
+    res = aStar.solve_problem(moderate_delivery_problem_with_distance_cost)
     print(res)
 
     def within_focal_h_sum_priority_function(node: SearchNode, problem: GraphProblem, solver: AStarEpsilon):
@@ -267,8 +267,9 @@ def deliveries_truck_problem_with_astar_epsilon_experiments():
     #       solve the `moderate_delivery_problem_with_distance_cost` with it and print the results.
     #       use focal_epsilon=0.03, and  max_focal_size=40.
     #       use within_focal_priority_function=within_focal_h_sum_priority_function
-    exit()  # TODO: remove!
-
+    aStarE = AStarEpsilon(TruckDeliveriesMSTAirDistHeuristic , within_focal_h_sum_priority_function, focal_epsilon=0.03,  max_focal_size=40)
+    res = aStarE.solve_problem(moderate_delivery_problem_with_distance_cost)
+    print(res)
 
 def deliveries_truck_problem_anytime_astar_experiments():
     print()
@@ -303,7 +304,7 @@ def run_all_experiments():
     #basic_deliveries_truck_problem_experiments()
     #deliveries_truck_problem_with_astar_experiments()
     #deliveries_truck_problem_with_weighted_astar_experiments()
-    multiple_objectives_deliveries_truck_problem_experiments()
+    #multiple_objectives_deliveries_truck_problem_experiments()
     deliveries_truck_problem_with_astar_epsilon_experiments()
     deliveries_truck_problem_anytime_astar_experiments()
     big_deliveries_truck_problem_with_non_acceptable_heuristic_and_anytime_astar_experiments()
