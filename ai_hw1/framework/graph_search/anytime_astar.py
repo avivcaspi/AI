@@ -80,7 +80,19 @@ class AnytimeAStar(GraphProblemSolver):
                 #   (SearchResult object) found with the best g-cost (use `solution_g_cost` field of SearchResult to
                 #   obtain the g-cost of a solution).
                 #  Make sure to also read the big comment in the head of this class.
-                raise NotImplementedError()   # TODO: remove this line!
+                w = (low_heuristic_weight + high_heuristic_weight) / 2
+                wAstar = AStar(heuristic_function_type=self.heuristic_function_type, heuristic_weight=w,
+                               max_nr_states_to_expand=self.max_nr_states_to_expand_per_iteration)
+                wAstar_res = wAstar.solve_problem(problem)
+                total_nr_expanded_states += wAstar_res.nr_expanded_states
+                max_nr_stored_states = max(max_nr_stored_states, wAstar_res.max_nr_stored_states)
+                if not wAstar_res.is_solution_found:
+                    low_heuristic_weight = w
+                else:
+                    high_heuristic_weight = w
+                    if wAstar_res.solution_g_cost < best_solution.solution_g_cost:
+                        best_solution = wAstar_res
+                        best_heuristic_weight = w
 
         self.solver_name = f'{self.__class__.solver_name} (h={best_solution.solver.heuristic_function.heuristic_name}, w={best_heuristic_weight:.3f})'
         return best_solution._replace(

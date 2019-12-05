@@ -282,7 +282,9 @@ def deliveries_truck_problem_anytime_astar_experiments():
     # TODO: create an instance of `AnytimeAStar` once with the `TruckDeliveriesMSTAirDistHeuristic`, with
     #       `max_nr_states_to_expand_per_iteration` set to 50, solve the
     #       `moderate_delivery_problem_with_distance_cost` with it and print the results.
-    exit()  # TODO: remove!
+    anytime_astar = AnytimeAStar(TruckDeliveriesMSTAirDistHeuristic, max_nr_states_to_expand_per_iteration=50)
+    res = anytime_astar.solve_problem(moderate_delivery_problem_with_distance_cost)
+    print(res)
 
 
 def big_deliveries_truck_problem_with_non_acceptable_heuristic_and_anytime_astar_experiments():
@@ -296,15 +298,20 @@ def big_deliveries_truck_problem_with_non_acceptable_heuristic_and_anytime_astar
     # TODO: create an instance of `AnytimeAStar` once with the `TruckDeliveriesSumAirDistHeuristic`,
     #       and then with the `TruckDeliveriesMSTAirDistHeuristic`, both with `max_nr_states_to_expand_per_iteration`
     #       set to 400, solve the `big_delivery_problem_with_distance_cost` with it and print the results.
-    exit()  # TODO: remove!
+    anytime_astar = AnytimeAStar(TruckDeliveriesSumAirDistHeuristic, max_nr_states_to_expand_per_iteration=400)
+    res = anytime_astar.solve_problem(big_delivery_problem_with_distance_cost)
+    print(res)
 
+    anytime_astar = AnytimeAStar(TruckDeliveriesMSTAirDistHeuristic, max_nr_states_to_expand_per_iteration=400)
+    res = anytime_astar.solve_problem(big_delivery_problem_with_distance_cost)
+    print(res)
 
 def run_all_experiments():
     toy_map_problem_experiments()
-    #basic_deliveries_truck_problem_experiments()
-    #deliveries_truck_problem_with_astar_experiments()
-    #deliveries_truck_problem_with_weighted_astar_experiments()
-    #multiple_objectives_deliveries_truck_problem_experiments()
+    basic_deliveries_truck_problem_experiments()
+    deliveries_truck_problem_with_astar_experiments()
+    deliveries_truck_problem_with_weighted_astar_experiments()
+    multiple_objectives_deliveries_truck_problem_experiments()
     deliveries_truck_problem_with_astar_epsilon_experiments()
     deliveries_truck_problem_anytime_astar_experiments()
     big_deliveries_truck_problem_with_non_acceptable_heuristic_and_anytime_astar_experiments()
