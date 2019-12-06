@@ -157,4 +157,9 @@ class TruckDeliveriesMSTAirDistHeuristic(HeuristicFunction):
         graph = nx.Graph()
         graph.add_weighted_edges_from(graph_data)
         mst = nx.minimum_spanning_tree(graph)
+        edeges = mst.edges(data=True)
+        size_ = sum([w['weight'] for _,_,w in edeges])
+        weight = mst.size(weight='weight')
+        if weight != size_ :
+            print("NOOOOOOOOOOOOOOOOOOOOOOOOOO THIS SUCKSSSSSSSS")
         return mst.size(weight='weight')
