@@ -81,11 +81,14 @@ class AnytimeAStar(GraphProblemSolver):
                 #   obtain the g-cost of a solution).
                 #  Make sure to also read the big comment in the head of this class.
                 w = (low_heuristic_weight + high_heuristic_weight) / 2
+                # Initializing astar with current weight and solving the problem
                 wAstar = AStar(heuristic_function_type=self.heuristic_function_type, heuristic_weight=w,
                                max_nr_states_to_expand=self.max_nr_states_to_expand_per_iteration)
                 wAstar_res = wAstar.solve_problem(problem)
                 total_nr_expanded_states += wAstar_res.nr_expanded_states
                 max_nr_stored_states = max(max_nr_stored_states, wAstar_res.max_nr_stored_states)
+                # If a solution was not found we set the weight to be the new lower bound, otherwise we set it as
+                # the new higher bound and check if this solution is better
                 if not wAstar_res.is_solution_found:
                     low_heuristic_weight = w
                 else:

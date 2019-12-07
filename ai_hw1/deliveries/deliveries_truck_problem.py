@@ -226,6 +226,7 @@ class DeliveriesTruckProblem(GraphProblem):
         TODO [Ex.15]: implement this method!
         """
         assert isinstance(state, DeliveriesTruckState)
+        # To check goal state we only check if the dropped deliveries are all the deliveries in the problem
         return set(self.problem_input.deliveries) == state.dropped_deliveries
 
     def _calc_map_road_cost(self, link: Link) -> DeliveryCost:
@@ -242,6 +243,7 @@ class DeliveriesTruckProblem(GraphProblem):
                 appropriate field in the problem input (accessible by `self.problem_input`) to get the toll road
                 cost per meter.
         """
+        # Calculating time and money cost and returning them
         optimal_velocity, gas_cost_per_meter = self.problem_input.delivery_truck.calc_optimal_driving_parameters(
             optimization_objective=self.optimization_objective, max_driving_speed=link.max_speed)
         time_cost = link.distance / optimal_velocity
@@ -277,11 +279,13 @@ class DeliveriesTruckProblem(GraphProblem):
         if self.optimization_objective == OptimizationObjective.Distance:
             return total_distance_lower_bound
         elif self.optimization_objective == OptimizationObjective.Time:
+            # We create dummy link to sen to calc function, we use MAX_ROAD_SPEED to get lower bound of the time
             link = Link(1, 2, distance=total_distance_lower_bound,
                         highway_type=1, max_speed=MAX_ROAD_SPEED, is_toll_road=False)
             return self._calc_map_road_cost(link).time_cost
         else:
             assert self.optimization_objective == OptimizationObjective.Money
+            # We use MAX_ROAD_SPEED so the car will drive in optimal speed and we will get lower bound of the money
             link = Link(1, 2, distance=total_distance_lower_bound,
                         highway_type=1, max_speed=MAX_ROAD_SPEED, is_toll_road=False)
             return self._calc_map_road_cost(link).money_cost
@@ -312,6 +316,7 @@ class DeliveriesTruckProblem(GraphProblem):
         """
         current_location = {state.current_location}
         waiting_deliveries = self.get_deliveries_waiting_to_pick(state)
+        # Retrieving all junctions from waiting deliveries pick and drop junctions
         waiting_junctions = {delivery.pick_location for delivery in waiting_deliveries} | \
                             {delivery.drop_location for delivery in waiting_deliveries}
         loaded_junctions = {delivery.drop_location for delivery in state.loaded_deliveries}

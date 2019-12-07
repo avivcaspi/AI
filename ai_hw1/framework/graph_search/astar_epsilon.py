@@ -69,15 +69,19 @@ class AStarEpsilon(AStar):
          for the extracted (and returned) node.
         """
         if not self.open.is_empty():
+            # Building focal list using the min node in open
             node_min = self.open.pop_next_node()
-            focal = {node_min: self.within_focal_priority_function(node_min,problem,self)}
+            focal = {node_min: self.within_focal_priority_function(node_min, problem, self)}
             for i in range(self.max_focal_size - 1):
+                # We add nodes to focal only if their f is less than (1+epsilon)node_min.f
+                # We pop them from open and insert them to focal
                 if not self.open.is_empty() and \
                     self.open.peek_next_node().expanding_priority <= node_min.expanding_priority * (1 + self.focal_epsilon):
                     tmp_node = self.open.pop_next_node()
-                    focal[tmp_node] = self.within_focal_priority_function(tmp_node,problem,self)
+                    focal[tmp_node] = self.within_focal_priority_function(tmp_node, problem, self)
                 else:
                     break
+            # Finding min node in focal according to focal priority (focal is a dictionary with nodes and focal prio)
             focal_min = min(focal.keys(), key=(lambda k: focal[k]))
             focal.pop(focal_min)
             if self.use_close:

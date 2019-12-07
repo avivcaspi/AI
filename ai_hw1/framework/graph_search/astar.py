@@ -66,6 +66,8 @@ class AStar(BestFirstSearch):
         Remember: In A*, in contrast to uniform-cost, a successor state might have an already closed node,
                   but still could be improved.
         """
+        # First we check if the state is in close set, if it is we check if the current g cost is better than
+        # previous g cost and if it is we remove the node from close and add it back to open
         if self.close.has_state(successor_node.state):
             prev_node = self.close.get_node_by_state(successor_node.state)
             prev_g = prev_node.g_cost
@@ -74,11 +76,13 @@ class AStar(BestFirstSearch):
                 self.open.push_node(successor_node)
             return
 
+        # Second we check if the state is in open, if it is we check if we got improvement in f
         if self.open.has_state(successor_node.state):
             already_found_node_with_same_state = self.open.get_node_by_state(successor_node.state)
             if already_found_node_with_same_state.expanding_priority > successor_node.expanding_priority:
                 self.open.extract_node(already_found_node_with_same_state)
 
+        # If the state is new we add it to open queue
         if not self.open.has_state(successor_node.state):
             self.open.push_node(successor_node)
 
