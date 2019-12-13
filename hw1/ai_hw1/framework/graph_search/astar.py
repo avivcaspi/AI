@@ -70,8 +70,8 @@ class AStar(BestFirstSearch):
         # previous g cost and if it is we remove the node from close and add it back to open
         if self.close.has_state(successor_node.state):
             prev_node = self.close.get_node_by_state(successor_node.state)
-            prev_g = prev_node.g_cost
-            if successor_node.g_cost < prev_g:
+            prev_f = prev_node.expanding_priority
+            if successor_node.expanding_priority < prev_f:
                 self.close.remove_node(prev_node)
                 self.open.push_node(successor_node)
             return
