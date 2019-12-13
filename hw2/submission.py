@@ -13,7 +13,14 @@ def heuristic(state: GameState, player_index: int) -> float:
     :return:
     """
     # Insert your code here...
-    pass
+    if not state.snakes[player_index].alive:
+        return state.snakes[player_index].length
+    return 100 * state.snakes[player_index].length - find_nearest_apple_dist(state, player_index)
+
+
+def find_nearest_apple_dist(state: GameState, player_index: int) -> float:
+    head = state.snakes[player_index].head
+    return np.min([np.linalg.norm(np.array(head) - np.array(apple)) for apple in state.fruits_locations])
 
 
 class MinimaxAgent(Player):
