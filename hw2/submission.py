@@ -15,18 +15,19 @@ def heuristic(state: GameState, player_index: int) -> float:
     # Insert your code here...
     if not state.snakes[player_index].alive:
         return state.snakes[player_index].length
-    closest_apple = find_nearest_apple_dist(state, player_index)
+    closest_apple = _find_nearest_apple_dist(state, player_index)
     if closest_apple > 0:
         return state.snakes[player_index].length + 1 / closest_apple
     return state.snakes[player_index].length
     # TODO cluster around one apple
 
-def find_nearest_apple_dist(state: GameState, player_index: int) -> float:
+
+def _find_nearest_apple_dist(state: GameState, player_index: int) -> float:
     head = state.snakes[player_index].head
     return np.min([np.linalg.norm(np.array(head) - np.array(apple)) for apple in state.fruits_locations])
 
 
-def get_weight_sum_dist_from_fruits(state: GameState, player_index: int) -> float:
+def _get_weight_sum_dist_from_fruits(state: GameState, player_index: int) -> float:
     head = state.snakes[player_index].head
     dists = np.sort([np.linalg.norm(np.array(head) - np.array(apple)) for apple in state.fruits_locations])
     sum = 0
