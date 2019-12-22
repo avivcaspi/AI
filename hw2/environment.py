@@ -245,7 +245,6 @@ class GameState:
         for i in range(len(GameAction) ** len(opponents_alive)):
             opponents_actions_str = np.base_repr(i, base=len(GameAction))
             opponents_actions_str = '0'*(len(opponents_alive) - len(opponents_actions_str)) + opponents_actions_str
-            # print(opponents_actions_str)
             snake_actions = list(GameAction)
             possible_actions_dict = {opp: snake_actions[int(opp_action_str)]
                                      for opp, opp_action_str in zip(opponents_alive, opponents_actions_str)}

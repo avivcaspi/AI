@@ -167,19 +167,18 @@ def SAHC_sideways():
     """
     n = 50
     actions = [GameAction.STRAIGHT for _ in range(n)]
-    for j in range(3):
-        for i in range(n):
-            best_action = []
-            best_value = -np.inf
-            for action in list(GameAction):
-                actions[i] = action
-                fitness = get_fitness(tuple(actions))
-                if fitness > best_value:
-                    best_value = fitness
-                    best_action = [action]
-                elif fitness == best_value:
-                    best_action.append(action)
-            actions[i] = np.random.choice(best_action)
+    for i in range(n):
+        best_action = []
+        best_value = -np.inf
+        for action in list(GameAction):
+            actions[i] = action
+            fitness = get_fitness(tuple(actions))
+            if fitness > best_value:
+                best_value = fitness
+                best_action = [action]
+            elif fitness == best_value:
+                best_action.append(action)
+        actions[i] = np.random.choice(best_action)
 
     print(actions)
 
@@ -198,12 +197,13 @@ def local_search():
     :return:
     """
     l = 50
-    n = 10
-    pc = 0.9
-    pm = 0.2
-    num_of_generations = 30
+    n = 30
+    pc = 0.5
+    pm = 0.05
+    num_of_generations = 10
     generation = np.random.choice(list(GameAction), (n, l))
-    for _ in range(num_of_generations):
+    for i in range(num_of_generations):
+
         fitness_list = [get_fitness(tuple(actions)) for actions in generation]
         total_fitness = np.sum(fitness_list)
         fitness_list = fitness_list / total_fitness
@@ -229,6 +229,7 @@ def local_search():
         generation = next_gen
     fitness_list = [get_fitness(tuple(actions)) for actions in generation]
     print(generation[np.argmax(np.array(fitness_list))])
+    print(np.max(np.array(fitness_list)))
 
 
 class TournamentAgent(Player):
