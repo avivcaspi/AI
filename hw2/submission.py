@@ -2,6 +2,7 @@ from environment import Player, GameState, GameAction, get_next_state
 from utils import get_fitness
 import numpy as np
 from enum import Enum
+import time
 
 
 def heuristic(state: GameState, player_index: int) -> float:
@@ -17,7 +18,7 @@ def heuristic(state: GameState, player_index: int) -> float:
         return state.snakes[player_index].length
     closest_apple = _find_nearest_apple_dist(state, player_index)
     if closest_apple > 0:
-        return state.snakes[player_index].length + 0.8 / closest_apple
+        return state.snakes[player_index].length + 1 / closest_apple
     return state.snakes[player_index].length
 
 
@@ -26,7 +27,7 @@ def _find_nearest_apple_dist(state: GameState, player_index: int) -> float:
     dists = [np.linalg.norm(np.array(head) - np.array(apple)) for apple in state.fruits_locations]
     if len(dists) > 0:
         return np.min(dists)
-    return 1
+    return 0
 
 
 def _find_nearest_apple_num(state: GameState, pos: tuple, r: int) -> float:
@@ -60,6 +61,7 @@ class MinimaxAgent(Player):
     hint: use the 'agent_action' property to determine if it's the agents turn or the opponents' turn. You can pass
     'None' value (without quotes) to indicate that your agent haven't picked an action yet.
     """
+
     class Turn(Enum):
         AGENT_TURN = 'AGENT_TURN'
         OPPONENTS_TURN = 'OPPONENTS_TURN'
@@ -78,8 +80,12 @@ class MinimaxAgent(Player):
             return MinimaxAgent.Turn.AGENT_TURN if self.agent_action is None else MinimaxAgent.Turn.OPPONENTS_TURN
 
     def get_action(self, state: GameState) -> GameAction:
+        start_time = time.time()
+        depth = 3
         turn_state = self.TurnBasedGameState(state, agent_action=None)
-        _, action = self.rb_minimax(turn_state, self.player_index, 2)
+        _, action = self.rb_minimax(turn_state, self.player_index, depth)
+        self.turn_times.append(time.time() - start_time)
+        print(self.turn_times[-1])
         return action
 
     def rb_minimax(self, state: TurnBasedGameState, player_index: int, depth: int):
@@ -113,8 +119,11 @@ class MinimaxAgent(Player):
 
 class AlphaBetaAgent(MinimaxAgent):
     def get_action(self, state: GameState) -> GameAction:
+        start_time = time.time()
+        depth = 2
         turn_state = self.TurnBasedGameState(state, agent_action=None)
-        _, action = self.alphabeta(turn_state, self.player_index, 3, -np.inf, np.inf)
+        _, action = self.alphabeta(turn_state, self.player_index, depth, -np.inf, np.inf)
+        self.turn_times.append(time.time() - start_time)
         return action
 
     def alphabeta(self, state: MinimaxAgent.TurnBasedGameState, player_index: int, depth: int, alpha: float, beta: float):
@@ -239,6 +248,6 @@ class TournamentAgent(Player):
 
 
 if __name__ == '__main__':
-    #SAHC_sideways()
+    SAHC_sideways()
     local_search()
 

@@ -374,7 +374,7 @@ def get_next_state(game_state: GameState, living_players_actions: dict) -> GameS
 
 class Player(ABC):
     n_players: int = 0
-
+    turn_times = []
     @abstractmethod
     def get_action(self, state: GameState) -> GameAction:
         pass
@@ -553,6 +553,7 @@ class SnakesBackendSync:
             self.played_this_turn = []
 
         print(f"Winner: {self.game_state.current_winner}")
+        print(f'Your Agent average action time : {np.mean(self._agents_controllers[0].turn_times)}')
 
     def get_living_agents(self):
         """
