@@ -206,10 +206,10 @@ def local_search():
     :return:
     """
     l = 50
-    n = 30
+    n = 1000
     pc = 0.5
     pm = 0.05
-    num_of_generations = 10
+    num_of_generations = 30
     generation = np.random.choice(list(GameAction), (n, l))
     for i in range(num_of_generations):
 
