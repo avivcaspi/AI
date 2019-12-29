@@ -88,7 +88,6 @@ def start_custom_game(p1: str, p2: str, game_duration: int, board_width: int, bo
                             board_width,
                             board_height,
                             n_fruits,
-                            graphics_off=graphics_off,
                             fast_run=fast_run)
     
     

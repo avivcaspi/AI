@@ -16,10 +16,20 @@ def heuristic(state: GameState, player_index: int) -> float:
     # Insert your code here...
     if not state.snakes[player_index].alive:
         return state.snakes[player_index].length
+    reachable_area = _get_reachable_area(state, player_index)
     closest_apple = _find_nearest_apple_dist(state, player_index)
-    if closest_apple > 0:
-        return state.snakes[player_index].length + 1 / closest_apple
-    return state.snakes[player_index].length
+    enemy_dist = _get_dist_from_enemy(state, player_index)
+    enemy_dist_factor = 0 if enemy_dist <= 2 else 1
+    reachable_area_factor = 0 if reachable_area < state.snakes[player_index].length + 5 else 2
+    return state.snakes[player_index].length + 1 / closest_apple + reachable_area_factor + enemy_dist_factor
+
+
+def _get_dist_from_enemy(state: GameState, player_index: int) -> float:
+    head = state.snakes[player_index].head
+    dists = [np.linalg.norm(np.array(head) - np.array(enemy.head)) for enemy in state.snakes if enemy.index != player_index and enemy.alive]
+    if len(dists) > 0:
+        return np.min(dists)
+    return np.inf
 
 
 def _find_nearest_apple_dist(state: GameState, player_index: int) -> float:
@@ -27,30 +37,28 @@ def _find_nearest_apple_dist(state: GameState, player_index: int) -> float:
     dists = [np.linalg.norm(np.array(head) - np.array(apple)) for apple in state.fruits_locations]
     if len(dists) > 0:
         return np.min(dists)
-    return 0
+    return np.inf
 
 
-def _find_nearest_apple_num(state: GameState, pos: tuple, r: int) -> float:
-    dists = [np.linalg.norm(np.array(pos) - np.array(apple)) for apple in state.fruits_locations]
-    r_dists = [dist for dist in dists if dist <= r]
-    return len(r_dists)
+def _get_reachable_area(state: GameState, player_index: int) -> float:
+    snake = state.snakes[player_index]
+    snake_board = state.get_board(player_index)[0]
+    return _dfs(snake_board, snake.head, True)
 
 
-def _find_cluster_around_apples(state: GameState, player_index: int, n=3) -> float:
-    head = state.snakes[player_index].head
-    closest_apples = {apple: np.linalg.norm(np.array(head) - np.array(apple)) for apple in state.fruits_locations}
-    closest_apples = sorted(closest_apples.items(), key=lambda k: k[1])
-    num_of_apple = min(len(closest_apples), n)
-    return sum([(_find_nearest_apple_num(state, apple[0], 3)/apple[1]) for apple in closest_apples[:num_of_apple]])
-
-
-def _get_weight_sum_dist_from_fruits(state: GameState, player_index: int) -> float:
-    head = state.snakes[player_index].head
-    dists = np.sort([np.linalg.norm(np.array(head) - np.array(apple)) for apple in state.fruits_locations])
-    sum = 0
-    for i, dist in enumerate(dists):
-        sum += 1 / dist
-    return sum
+def _dfs(board, pos, start: bool, depth=0):
+    if len(board) > 25 and depth > 30:
+        return 0
+    area = 0
+    if not (0 <= pos[0] < len(board) and 0 <= pos[1] < len(board[0])) or (board[pos[0]][pos[1]] > 0 and not start):
+        return 0
+    area += 1
+    board[pos[0]][pos[1]] = 1
+    area += _dfs(board, [pos[0] + 1, pos[1]], False, depth + 1)
+    area += _dfs(board, [pos[0], pos[1] + 1], False, depth + 1)
+    area += _dfs(board, [pos[0] - 1, pos[1]], False, depth + 1)
+    area += _dfs(board, [pos[0], pos[1] - 1], False, depth + 1)
+    return area
 
 
 class MinimaxAgent(Player):
@@ -71,6 +79,7 @@ class MinimaxAgent(Player):
         This class is a wrapper class for a GameState. It holds the action of our agent as well, so we can model turns
         in the game (set agent_action=None to indicate that our agent has yet to pick an action).
         """
+
         def __init__(self, game_state: GameState, agent_action: GameAction):
             self.game_state = game_state
             self.agent_action = agent_action
@@ -90,7 +99,8 @@ class MinimaxAgent(Player):
 
     def rb_minimax(self, state: TurnBasedGameState, player_index: int, depth: int):
         if state.turn == MinimaxAgent.Turn.AGENT_TURN:
-            if state.game_state.turn_number == state.game_state.game_duration_in_turns or not state.game_state.snakes[player_index].alive:
+            if state.game_state.turn_number == state.game_state.game_duration_in_turns or not state.game_state.snakes[
+                player_index].alive:
                 return state.game_state.snakes[player_index].length, state.agent_action
             if depth == 0:
                 return heuristic(state.game_state, player_index), state.agent_action
@@ -107,7 +117,7 @@ class MinimaxAgent(Player):
             best_action = None
             min_value = np.inf
             for opponents_actions in state.game_state.get_possible_actions_dicts_given_action(state.agent_action,
-                                                                                   player_index=self.player_index):
+                                                                                              player_index=self.player_index):
                 next_state = get_next_state(state.game_state, opponents_actions)
                 turn_state = self.TurnBasedGameState(next_state, None)
                 next_state_value, action = self.rb_minimax(turn_state, player_index, depth - 1)
@@ -120,15 +130,17 @@ class MinimaxAgent(Player):
 class AlphaBetaAgent(MinimaxAgent):
     def get_action(self, state: GameState) -> GameAction:
         start_time = time.time()
-        depth = 2
+        depth = 4
         turn_state = self.TurnBasedGameState(state, agent_action=None)
         _, action = self.alphabeta(turn_state, self.player_index, depth, -np.inf, np.inf)
         self.turn_times.append(time.time() - start_time)
         return action
 
-    def alphabeta(self, state: MinimaxAgent.TurnBasedGameState, player_index: int, depth: int, alpha: float, beta: float):
+    def alphabeta(self, state: MinimaxAgent.TurnBasedGameState, player_index: int, depth: int, alpha: float,
+                  beta: float):
         if state.turn == MinimaxAgent.Turn.AGENT_TURN:
-            if state.game_state.turn_number == state.game_state.game_duration_in_turns or not state.game_state.snakes[player_index].alive:
+            if state.game_state.turn_number == state.game_state.game_duration_in_turns or not state.game_state.snakes[
+                player_index].alive:
                 return state.game_state.snakes[player_index].length, state.agent_action
             if depth == 0:
                 return heuristic(state.game_state, player_index), state.agent_action
@@ -148,7 +160,7 @@ class AlphaBetaAgent(MinimaxAgent):
             best_action = None
             min_value = np.inf
             for opponents_actions in state.game_state.get_possible_actions_dicts_given_action(state.agent_action,
-                                                                                   player_index=self.player_index):
+                                                                                              player_index=self.player_index):
                 next_state = get_next_state(state.game_state, opponents_actions)
                 turn_state = self.TurnBasedGameState(next_state, None)
                 next_state_value, action = self.alphabeta(turn_state, player_index, depth - 1, alpha, beta)
@@ -217,7 +229,7 @@ def local_search():
         total_fitness = np.sum(fitness_list)
         fitness_list = fitness_list / total_fitness
         next_gen = []
-        for _ in range(n//2):
+        for _ in range(n // 2):
             parents = np.random.choice(n, 2, p=fitness_list)
             par1 = generation[parents[0]]
             par2 = generation[parents[1]]
@@ -250,4 +262,3 @@ class TournamentAgent(Player):
 if __name__ == '__main__':
     SAHC_sideways()
     local_search()
-
