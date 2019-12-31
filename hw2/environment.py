@@ -376,7 +376,6 @@ def get_next_state(game_state: GameState, living_players_actions: dict) -> GameS
 
 class Player(ABC):
     n_players: int = 0
-    turn_times = []
     @abstractmethod
     def get_action(self, state: GameState) -> GameAction:
         pass
@@ -555,7 +554,6 @@ class SnakesBackendSync:
             self.played_this_turn = []
 
         print(f"Winner: {self.game_state.current_winner}")
-        print(f'average time is : {np.mean(self._agents_controllers[0].turn_times)}')
 
     def get_living_agents(self):
         """
@@ -570,6 +568,7 @@ class SnakesBackendSync:
         Determine which snake is longest in current state. Tie break using 'closest head to a fruit'
         :return:
         """
+        longest_snake_idx = None
         longest_snake_idx = None
         for snake_i, snake in enumerate(board_state.snakes):
             if snake.alive:
