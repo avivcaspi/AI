@@ -376,6 +376,7 @@ def get_next_state(game_state: GameState, living_players_actions: dict) -> GameS
 
 class Player(ABC):
     n_players: int = 0
+
     @abstractmethod
     def get_action(self, state: GameState) -> GameAction:
         pass
@@ -568,7 +569,6 @@ class SnakesBackendSync:
         Determine which snake is longest in current state. Tie break using 'closest head to a fruit'
         :return:
         """
-        longest_snake_idx = None
         longest_snake_idx = None
         for snake_i, snake in enumerate(board_state.snakes):
             if snake.alive:
