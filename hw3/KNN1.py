@@ -15,6 +15,7 @@ def load_data(train_file, test_file):
 def normalize_data(x_train: np.ndarray, x_test: np.ndarray):
     min_train_value = np.min(x_train, axis=0)
     max_train_value = np.max(x_train, axis=0)
+
     x_train_normalized = (x_train - min_train_value) / (max_train_value - min_train_value)
     x_test_normalized = (x_test - min_train_value) / (max_train_value - min_train_value)
     return x_train_normalized, x_test_normalized
@@ -86,6 +87,7 @@ if __name__ == '__main__':
     y_pred = knn_classifier.predict(x_test)
     accuracy, tp, fp, fn, tn = get_accuracy(y_pred, y_test)
     print(f'accuracy = {accuracy} \n[[{tp} {fp}]\n[{fn} {tn}]]')
+    print(f'Error_w = {4*fn + fp}')
 
 
 
