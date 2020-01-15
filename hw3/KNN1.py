@@ -1,4 +1,5 @@
 import numpy as np
+import sklearn.metrics as sk
 
 
 def load_data(train_file, test_file):
@@ -85,9 +86,9 @@ if __name__ == '__main__':
     knn_classifier = KNNClassifier(k=9)
     knn_classifier.train(x_train, y_train)
     y_pred = knn_classifier.predict(x_test)
-    accuracy, tp, fp, fn, tn = get_accuracy(y_pred, y_test)
-    print(f'accuracy = {accuracy} \n[[{tp} {fp}]\n[{fn} {tn}]]')
-    print(f'Error_w = {4*fn + fp}')
+    confusion_mat = sk.confusion_matrix(y_test, y_pred)
+    print(confusion_mat)
+    print(f'Error_w = {4*confusion_mat[1,0] + confusion_mat[0,1]}')
 
 
 
