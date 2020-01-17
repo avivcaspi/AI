@@ -1,0 +1,12 @@
+x = 3 
+ confusion_matrix = [[98 31]
+ [27 44]]
+ accuracy = 0.71
+x = 9 
+ confusion_matrix = [[105  24]
+ [ 30  41]]
+ accuracy = 0.73
+x = 27 
+ confusion_matrix = [[104  25]
+ [ 30  41]]
+ accuracy = 0.725

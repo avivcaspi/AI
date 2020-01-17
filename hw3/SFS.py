@@ -24,7 +24,8 @@ def sfs(x_train, y_train, x_test, y_test):
         if best_feature is not None:
             features.append(best_feature)
             features_left.remove(best_feature)
-    print(features)
+
+    print(sorted(features))
     print(f' accuracy: {best_accuracy}')
 
 
@@ -32,3 +33,4 @@ if __name__ == '__main__':
     x_train, y_train, x_test, y_test, features_names = load_data('train.csv', 'test.csv')
     x_train, x_test = normalize_data(x_train, x_test)
     sfs(x_train, y_train, x_test, y_test)
+

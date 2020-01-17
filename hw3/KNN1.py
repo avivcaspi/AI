@@ -1,16 +1,6 @@
 import numpy as np
+from DT1 import load_data
 import sklearn.metrics as sk
-
-
-def load_data(train_file, test_file):
-    train_set = np.genfromtxt(train_file, delimiter=',', skip_header=1)
-    y_train = train_set[:, -1]
-    x_train = train_set[:, :-1]
-    test_set = np.genfromtxt(test_file, delimiter=',', skip_header=1)
-    y_test = test_set[:, -1]
-    x_test = test_set[:, :-1]
-    features_names = np.genfromtxt(train_file, delimiter=',', dtype=str, skip_footer=train_set.shape[0])[:-1]
-    return x_train, y_train, x_test, y_test, features_names
 
 
 def normalize_data(x_train: np.ndarray, x_test: np.ndarray):

@@ -20,11 +20,11 @@ class KNN2Classifier(KNNClassifier):
 if __name__ == '__main__':
     x_train, y_train, x_test, y_test, features_names = load_data('train.csv', 'test.csv')
     x_train, x_test = normalize_data(x_train, x_test)
-
-    knn_classifier = KNN2Classifier(k=9)
-    knn_classifier.train(x_train, y_train)
-    y_pred = knn_classifier.predict(x_test)
-    confusion_mat = sk.confusion_matrix(y_test, y_pred)
-    print(confusion_mat)
-    print(f'Error_w = {4 * confusion_mat[1, 0] + confusion_mat[0, 1]}')
+    for k in [1, 3, 9, 27]:
+        knn_classifier = KNN2Classifier(k=k)
+        knn_classifier.train(x_train, y_train)
+        y_pred = knn_classifier.predict(x_test)
+        confusion_mat = sk.confusion_matrix(y_test, y_pred)
+        print(confusion_mat)
+        print(f'Error_w = {4 * confusion_mat[1, 0] + confusion_mat[0, 1]}')
 
