@@ -29,13 +29,18 @@ def part3():
         print(f'Error_w = {4 * confusion_matrix[1, 0] + confusion_matrix[0, 1]}')
 
 
+from graphviz import Source
+
+
 def part4():
     print('part 4 -----------------------------------------')
     x_train, y_train, x_test, y_test, features_names = load_data('train.csv', 'test.csv')
     classifier = tree.DecisionTreeClassifier("entropy", min_samples_split=27)
     classifier.fit(x_train, y_train)
-    y_pred = classifier.predict(x_test)
-    #TODO add print of the tree
+    graph = Source(tree.export_graphviz(classifier, out_file=None, feature_names=features_names, class_names=['-', '+']))
+    png_bytes = graph.pipe(format='png')
+    with open('dtree_pipe.png', 'wb') as f:
+        f.write(png_bytes)
 
 
 def part7():
