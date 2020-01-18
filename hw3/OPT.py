@@ -18,7 +18,8 @@ def find_best_features(x_train, y_train, x_test, y_test):
                 best_accuracy = accuracy
                 best_subset = subset
 
-    print(f'best subset : {list(best_subset)}\nbest accuracy : {best_accuracy}')
+    print(list(best_subset))
+    # print(best_accuracy)
 
 
 def get_all_subsets(num_features: int):

@@ -17,7 +17,7 @@ def load_data(train_file, test_file):
 
 def classify(x_train, y_train, x_test):
     # classifier = tree.DecisionTreeClassifier("entropy", min_samples_split=x)
-    classifier = tree.DecisionTreeClassifier("entropy", random_state=0)
+    classifier = tree.DecisionTreeClassifier("entropy", random_state=2)
     classifier.fit(x_train, y_train)
     y_pred = classifier.predict(x_test)
     return y_pred

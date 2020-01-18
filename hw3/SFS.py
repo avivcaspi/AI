@@ -26,7 +26,7 @@ def sfs(x_train, y_train, x_test, y_test):
             features_left.remove(best_feature)
 
     print(sorted(features))
-    print(f' accuracy: {best_accuracy}')
+    # print(f' accuracy: {best_accuracy}')
 
 
 if __name__ == '__main__':
