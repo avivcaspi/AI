@@ -11,6 +11,7 @@ class KNN2Classifier(KNNClassifier):
         for i in range(test_size):
             nearest_neighbors = np.argpartition(dist_matrix[:, i], self.k)
             nearest_neighbors_labels = self.y_train[nearest_neighbors[:self.k]]
+            # giving each positive sample bigger value (*4)
             pos_num = np.sum(nearest_neighbors_labels) * 4
             neg_num = np.sum(nearest_neighbors_labels == 0)
             y_pred[i] = 1 if pos_num > neg_num else 0

@@ -1,7 +1,6 @@
 import numpy as np
 import sklearn as sk
 from sklearn import tree
-# import matplotlib.pyplot as plt
 
 
 def load_data(train_file, test_file):
@@ -16,23 +15,18 @@ def load_data(train_file, test_file):
 
 
 def classify(x_train, y_train, x_test):
-    # classifier = tree.DecisionTreeClassifier("entropy", min_samples_split=x)
+    # building the decision tree and training
     classifier = tree.DecisionTreeClassifier("entropy", random_state=2)
     classifier.fit(x_train, y_train)
-    y_pred = classifier.predict(x_test)
-    return y_pred
+    # predicting the classes of x_test
+    return classifier.predict(x_test)
 
 
 if __name__ == '__main__':
     x_train, y_train, x_test, y_test, features_names = load_data('train.csv', 'test.csv')
-    # for x in [3,9,27]:
-    #    classify(x_train, y_train, x_test, y_test,x=x)
+    # train and classify
     y_pred = classify(x_train, y_train, x_test)
     confusion_matrix = sk.metrics.confusion_matrix(y_test, y_pred)
     print(confusion_matrix)
-    print(f'Error_w = {4 * confusion_matrix[1, 0] + confusion_matrix[0, 1]}')
+    #  print(f'Error_w = {4 * confusion_matrix[1, 0] + confusion_matrix[0, 1]}')
 
-    # num_correct = (y_test == y_pred).sum()
-    # total = y_test.shape[0]
-    # accuracy = float(num_correct) / total
-    # print(f'x = {x}, accuracy = {accuracy}')

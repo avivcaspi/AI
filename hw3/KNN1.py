@@ -4,9 +4,10 @@ import sklearn.metrics as sk
 
 
 def normalize_data(x_train: np.ndarray, x_test: np.ndarray):
+    # calculates min and max of training data
     min_train_value = np.min(x_train, axis=0)
     max_train_value = np.max(x_train, axis=0)
-
+    # normalizing train and test set with train max - min values
     x_train_normalized = (x_train - min_train_value) / (max_train_value - min_train_value)
     x_test_normalized = (x_test - min_train_value) / (max_train_value - min_train_value)
     return x_train_normalized, x_test_normalized
@@ -19,6 +20,7 @@ class KNNClassifier:
         self.y_train = None
 
     def train(self, x_train: np.ndarray, y_train: np.ndarray):
+        # training only includes saving the train data
         self.x_train = x_train
         self.y_train = y_train
 
@@ -29,9 +31,12 @@ class KNNClassifier:
         test_size = x_test.shape[0]
         y_pred = np.zeros(test_size)
         for i in range(test_size):
+            # finds k nearest neighbors of sample i
             nearest_neighbors = np.argpartition(dist_matrix[:, i], self.k)
             nearest_neighbors_labels = self.y_train[nearest_neighbors[:self.k]]
+            # number of positive sample in nearest neighbors
             pos_num = np.sum(nearest_neighbors_labels)
+            # determine which class has more labels
             y_pred[i] = 1 if pos_num > self.k - pos_num else 0
         return y_pred
 
@@ -56,18 +61,11 @@ def euclidean_dist(x1: np.ndarray, x2: np.ndarray):
 
 
 def get_accuracy(y: np.ndarray, y_pred: np.ndarray):
-    # calculates accuracy, TP, TN, FP, FN
+    # calculates accuracy
     num_correct = (y == y_pred).sum()
     total = y.shape[0]
     accuracy = float(num_correct) / total
-    tp_mask = y == 1
-    tp = (y_pred * tp_mask).sum()
-    fp = tp_mask.sum() - tp
-    tn_mask = y == 0
-    fn = (y_pred * tn_mask).sum()
-    tn = tn_mask.sum() - fn
-
-    return accuracy, int(tp), int(fp), int(fn), int(tn)
+    return accuracy
 
 
 if __name__ == '__main__':
@@ -78,7 +76,7 @@ if __name__ == '__main__':
     y_pred = knn_classifier.predict(x_test)
     confusion_mat = sk.confusion_matrix(y_test, y_pred)
     print(confusion_mat)
-    print(f'Error_w = {4*confusion_mat[1,0] + confusion_mat[0,1]}')
+    # print(f'Error_w = {4*confusion_mat[1,0] + confusion_mat[0,1]}')
 
 
 
