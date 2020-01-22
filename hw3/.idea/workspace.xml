@@ -36,7 +36,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.KNN2">
+  <component name="RunManager" selected="Python.SFS">
     <configuration name="BALANCED" type="PythonConfigurationType" factoryName="Python">
       <module name="hw3" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -236,7 +236,8 @@
       <updated>1578756877804</updated>
       <workItem from="1578756886416" duration="19783000" />
       <workItem from="1579178934372" duration="26453000" />
-      <workItem from="1579595860934" duration="4910000" />
+      <workItem from="1579595860934" duration="5213000" />
+      <workItem from="1579686576561" duration="1492000" />
     </task>
     <servers />
   </component>
@@ -263,7 +264,7 @@
     <SUITE FILE_PATH="coverage/hw3$DT1.coverage" NAME="DT1 Coverage Results" MODIFIED="1579600367873" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/hw3$BALANCED.coverage" NAME="BALANCED Coverage Results" MODIFIED="1579600418885" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/hw3$KNN1.coverage" NAME="KNN1 Coverage Results" MODIFIED="1579600435498" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/hw3$SFS.coverage" NAME="SFS Coverage Results" MODIFIED="1579599002847" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/hw3$SFS.coverage" NAME="SFS Coverage Results" MODIFIED="1579688076514" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/hw3$OPT.coverage" NAME="OPT Coverage Results" MODIFIED="1579598482421" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/hw3$DT2.coverage" NAME="DT2 Coverage Results" MODIFIED="1579600409890" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
